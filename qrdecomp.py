@@ -85,6 +85,9 @@ def parse_arguments (argv):
         elif opt == '-o':
             output = arg
 
+    if not file and not dim:
+        parse_error ("No file or matrix dimension specified")
+
     return file, output, dim
 
 #######################################################################
