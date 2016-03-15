@@ -155,7 +155,7 @@ def get_eigenvalues_eigenvectors (A):
 def print_result (output, eigenvalues, eigenvectors):
     f = open (output, 'w')
     for (eigenvalue, eigenvector) in zip (eigenvalues, eigenvectors):
-        f.write ('For eigenvector {0}\n\t we have eigenvalue {1}\n'.format(eigenvalue, np.array_str (eigenvector, precision = 4, suppress_small=True)))
+        f.write ('For eigenvalue {0}\n\t we have eigenvector {1}\n'.format(eigenvalue, np.array_str (eigenvector, precision = 4, suppress_small=True)))
 
 def main (argv):
     file, output, dimension = parse_arguments (argv)
