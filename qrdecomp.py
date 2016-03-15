@@ -46,8 +46,10 @@ def generate_matrix (file_name, dimension):
 #######################################################################
 ####### Displays message when argument parsing resulted in error ######
 #######################################################################
-def parse_error ():
-    print ('qrdecomp -f <file_name> -d <dimension>')
+def parse_error (error_message):
+    if error_message:
+        print (error_message)
+    print ('qrdecomp -f <file_name> -d <dimension> -o <output_file>')
     print ('In case both a file name and a dimesnion are present, only file name is considered')
     sys.exit ()
 
@@ -79,6 +81,7 @@ def parse_arguments (argv):
             dim = int (arg)
         elif opt == '-o':
             output = arg
+
     return file, output, dim
 
 def arr_str (arr):
@@ -88,8 +91,6 @@ def qr_decomposition (A):
     N = A.shape[0]
     Q = np.empty (shape = (N, N), dtype = np.float64)
     R = np.zeros (shape = (N, N), dtype = np.float64)
-
-    debug.write ('We try to do QR decomposition for matrix:\n{0}\n'.format(arr_str (A)))
 
     for j in range (N):
         v = A[:,j]
@@ -102,8 +103,6 @@ def qr_decomposition (A):
         R.itemset((j, j), v_norm)
         Q[:,j] = v / R[j][j]
 
-    debug.write ('We get Q = \n{0}\n'.format (arr_str (Q)))
-    debug.write ('We get R = \n{0}\n'.format (arr_str (R)))
     return Q, R
 
 def get_next_qr_iteration (A):
