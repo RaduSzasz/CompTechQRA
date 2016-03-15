@@ -114,6 +114,10 @@ def qr_decomposition (A):
 
         v_norm = np.linalg.norm (v)
         R.itemset((j, j), v_norm)
+
+        if np.isclose (R[j][j], 0.0):
+            print ('Can not perform QR decomposition when columns of A are not linearly independent')
+            sys.exit ()
         Q[:,j] = v / R[j][j]
 
     return Q, R
