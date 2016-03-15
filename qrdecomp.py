@@ -63,7 +63,7 @@ def parse_error (error_message):
 ####### matrix dimension ##############################################
 #######################################################################
 def parse_arguments (argv):
-    # Help, file, dimension
+    # Help, file, dimension, output
     options = 'hf:d:o:'
     try:
         opts, args = getopt.getopt (argv, options)
