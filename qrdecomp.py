@@ -2,8 +2,6 @@ import numpy as np
 import sys
 import getopt
 
-debug = open ('debug.txt', 'w')
-
 #######################################################################
 ####### Reads the file provided via a command line argument and #######
 ####### returns a np.matrix ###########################################
@@ -115,10 +113,11 @@ def qr_decomposition (A):
         v_norm = np.linalg.norm (v)
         R.itemset((j, j), v_norm)
 
-        if np.isclose (R[j][j], 0.0):
-            print ('Can not perform QR decomposition when columns of A are not linearly independent')
-            sys.exit ()
-        Q[:,j] = v / R[j][j]
+        if not np.isclose (R[j][j], 0.0):
+            Q[:,j] = v / R[j][j]
+        else:
+            Q[:,j] = v
+            Q.itemset((j, j), 1.0)
 
     return Q, R
 
@@ -127,16 +126,21 @@ def qr_decomposition (A):
 ###### eigenvectors using the QR iteration algorithm ##################
 #######################################################################
 def get_eigenvalues_eigenvectors (A):
-    MAX_ITERATIONS = 1000
-    overall_Q = np.identity (A.shape[0])
+    MAX_ITERATIONS = 10000
+    N = A.shape[0]
+    overall_Q = np.identity (N)
     for it_no in range (MAX_ITERATIONS):
-        Q, R = qr_decomposition (A)
-        nextA = np.dot (R, Q)
+        I = np.identity (N) * A[N - 1][N - 1]
+        aTemp = np.subtract (A, I)
+        Q, R = qr_decomposition (aTemp)
 
-        overall_Q = np.dot (overall_Q, Q)
+        nextA = np.dot (R, Q)
+        nextA = np.add (nextA, I)
+
         if np.all (np.isclose (A, nextA)):
             break
 
+        overall_Q = np.dot (overall_Q, Q)
         A = nextA
 
     eigenvalues = np.diag (A)
