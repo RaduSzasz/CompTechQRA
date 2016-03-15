@@ -127,13 +127,17 @@ def qr_decomposition (A):
 ###### eigenvectors using the QR iteration algorithm ##################
 #######################################################################
 def get_eigenvalues_eigenvectors (A):
-    MAX_ITERATIONS = 10
+    MAX_ITERATIONS = 1000
     overall_Q = np.identity (A.shape[0])
-    for _ in range (MAX_ITERATIONS):
+    for it_no in range (MAX_ITERATIONS):
         Q, R = qr_decomposition (A)
         nextA = np.dot (R, Q)
-        A = nextA
+
         overall_Q = np.dot (overall_Q, Q)
+        if np.all (np.isclose (A, nextA)):
+            break
+
+        A = nextA
 
     eigenvalues = np.diag (A)
     eigenvectors = [overall_Q[:,i] for i in range (overall_Q.shape[1])]
