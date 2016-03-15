@@ -18,6 +18,9 @@ def read_file (file_name):
     # we can avoid precision problems further on
     return np.array (np.mat(matrix), dtype = np.float64)
 
+#######################################################################
+####### Generates a random square symmetric matrix of size N ##########
+#######################################################################
 def generate_rand_sym_matrix (N):
     matrix = np.empty (shape = (N, N), dtype = np.float64)
     for i in range (N):
@@ -84,9 +87,16 @@ def parse_arguments (argv):
 
     return file, output, dim
 
+#######################################################################
+###### Auxiliary method used for debugging purposes. Prints a #########
+###### matrix in a quite pretty way ###################################
+#######################################################################
 def arr_str (arr):
     return np.array_str (arr, precision = 5, suppress_small=True)
 
+
+#######################################################################
+#######################################################################
 def qr_decomposition (A):
     N = A.shape[0]
     Q = np.empty (shape = (N, N), dtype = np.float64)
@@ -105,13 +115,10 @@ def qr_decomposition (A):
 
     return Q, R
 
-def get_next_qr_iteration (A):
-    Q, R = qr_decomposition (A)
-    nextA = np.dot (R, Q)
-
-    return nextA
-
-
+#######################################################################
+###### Given an initial matrix A, gets its eigenvalues and ############
+###### eigenvectors using the QR iteration algorithm ##################
+#######################################################################
 def get_eigenvalues_eigenvectors (A):
     MAX_ITERATIONS = 10
     overall_Q = np.identity (A.shape[0])
@@ -125,6 +132,11 @@ def get_eigenvalues_eigenvectors (A):
     eigenvectors = [overall_Q[:,i] for i in range (overall_Q.shape[1])]
     return eigenvalues, eigenvectors
 
+#######################################################################
+###### Prints to the output file the eigenvalues and eigenvectors #####
+###### provided as arguments. The assumption that the eigenvalues #####
+###### and eigenvectors are given in pairs is made ####################
+#######################################################################
 def print_result (output, eigenvalues, eigenvectors):
     f = open (output, 'w')
     for (eigenvalue, eigenvector) in zip (eigenvalues, eigenvectors):
